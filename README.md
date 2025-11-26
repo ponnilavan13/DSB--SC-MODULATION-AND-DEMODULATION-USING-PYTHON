@@ -28,8 +28,63 @@ __Procedure__:
 6) Coherent demodulation (multiply by synchronized carrier)
 7) Low-pass filter to recover message
 
-   __Tabulation__:
+__Program__:
+   import numpy as np
+   import matplotlib.pyplot as plt
+   fs = 10000 
+   t = np.arange(0, 0.01, 1/fs)
 
-   __Output__:
+   Am = 1       
+   Ac = 5      
+   fm = 100     
+   fc = 1000    
+   mod_index = 0.7  
 
-   __Result__:
+   message = Am * np.sin(2 * np.pi * fm * t)
+   carrier = Ac * np.sin(2 * np.pi * fc * t)
+   am_signal = Ac * (1 + mod_index * np.sin(2 * np.pi * fm * t)) * np.sin(2 * np.pi * fc * t)
+   rectified = np.abs(am_signal)
+   N = 50
+   demodulated = np.convolve(rectified, np.ones(N)/N, mode='same')
+   plt.figure(figsize=(12,10))
+
+   plt.subplot(4,1,1)
+   plt.plot(t, message)
+   plt.title("Message Signal (Modulating Signal)")
+   plt.xlabel("Time")
+   plt.ylabel("Amplitude")
+
+   plt.subplot(4,1,2)
+   plt.plot(t, carrier)
+   plt.title("Carrier Signal")
+   plt.xlabel("Time")
+   plt.ylabel("Amplitude")
+
+   plt.subplot(4,1,3)
+   plt.plot(t, am_signal, color='red')
+   plt.title("AM Modulated Signal")
+   plt.xlabel("Time")
+   plt.ylabel("Amplitude")
+
+   plt.subplot(4,1,4)
+   plt.plot(t, demodulated, color='green')
+   plt.title("Demodulated Signal (Recovered Message)")
+   plt.xlabel("Time")
+   plt.ylabel("Amplitude")
+
+   plt.tight_layout()
+   plt.show()
+
+
+ __Tabulation__:
+![WhatsApp Image 2025-11-26 at 22 47 27_d28e6bde](https://github.com/user-attachments/assets/e4f77520-da3c-4389-8835-024695a27355)
+
+
+
+__Output__:
+
+   <img width="1189" height="990" alt="image" src="https://github.com/user-attachments/assets/1b7cbd4d-7def-463f-8f02-b9b551a65169" />
+
+ __Result__:
+
+Thus the DSB-SC is proved and verified using python successfully.
